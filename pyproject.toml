@@ -8,4 +8,6 @@ dependencies = [
     "flask",
     "apiflask",
     "peewee",
+    "Faker",
+    "PyJWT",
 ]
