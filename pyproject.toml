@@ -10,4 +10,5 @@ dependencies = [
     "peewee",
     "Faker",
     "PyJWT",
+    "requests"
 ]
