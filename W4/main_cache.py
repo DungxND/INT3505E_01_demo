@@ -67,6 +67,7 @@ def get_book(book_id):
         response_data = json.dumps(book_data)
         response = Response(response_data, mimetype="application/json", status=200)
         response.headers["ETag"] = etag
+        response.headers["Cache-Control"] = "public, max-age: 3600, must-revalidate"
         return response
 
     except DoesNotExist:
@@ -87,6 +88,7 @@ def update_book(book_id, json_data):
         response_data = json.dumps(updated_book_data)
         response = Response(response_data, mimetype="application/json", status=200)
         response.headers["ETag"] = etag
+        response.headers["Cache-Control"] = "public, max-age: 3600, must-revalidate"
         return response
 
     except DoesNotExist:
