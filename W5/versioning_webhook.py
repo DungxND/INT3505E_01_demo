@@ -75,7 +75,6 @@ class BookV2Schema(Schema):
     author = fields.String()
     is_available = fields.Boolean(attribute="available")
 
-// Query param
 @bp_v2.route("/books/<int:book_id>", methods=["GET"])
 @app.output(BookV2Schema)
 def get_book_v2(book_id):
