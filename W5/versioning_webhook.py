@@ -10,7 +10,7 @@ from peewee import (
     DoesNotExist,
 )
 
-db = SqliteDatabase("books_demo.db")
+db = SqliteDatabase("books.db")
 
 class Book(Model):
     id = AutoField()
@@ -35,7 +35,6 @@ def trigger_webhook(event_type, data):
         except requests.exceptions.RequestException as e:
             print(f"Failed to send webhook to {url}: {e}")
 
-# --- Book Service ---
 class BookService:
     def create_book(self, data):
         if "title" not in data or "author" not in data:
@@ -76,6 +75,7 @@ class BookV2Schema(Schema):
     author = fields.String()
     is_available = fields.Boolean(attribute="available")
 
+// Query param
 @bp_v2.route("/books/<int:book_id>", methods=["GET"])
 @app.output(BookV2Schema)
 def get_book_v2(book_id):
