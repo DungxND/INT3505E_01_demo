@@ -1,0 +1,945 @@
+openapi: 3.0.3
+info:
+  description: Development documentation
+  title: L'Artelier API Documentation
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /:
+    get:
+      operationId: get_index
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getIndex_200_response"
+          description: Health check
+      summary: Health check endpoint
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /api/:
+    get:
+      operationId: get_api
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApi_200_response"
+          description: API information
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /api/auth/login:
+    post:
+      operationId: post_api_auth_login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postApiAuthLogin_request"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/postApiAuthLogin_request"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/postApiAuthLogin_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_200_response"
+          description: Response for status 200
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 401
+      summary: Log in a user
+      tags:
+      - Authentication
+      x-openapi-router-controller: openapi_server.controllers.authentication_controller
+  /api/auth/logout:
+    post:
+      operationId: post_api_auth_logout
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogout_200_response"
+          description: Response for status 200
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 401
+      summary: Log out the current user
+      tags:
+      - Authentication
+      x-openapi-router-controller: openapi_server.controllers.authentication_controller
+  /api/users/:
+    get:
+      operationId: get_api_users
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApiUsersOffset_200_response"
+          description: Response for status 200
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 403
+      summary: Get all users (Admin Only)
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+    post:
+      operationId: post_api_users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postApiUsers_request"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/postApiUsers_request"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/postApiUsers_request"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiUsers_201_response"
+          description: Response for status 201
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 409
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 500
+      summary: Register a new user
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/cursor:
+    get:
+      operationId: get_api_users_cursor
+      parameters:
+      - explode: true
+        in: query
+        name: cursor
+        required: true
+        schema:
+          default: 0
+          minimum: 0
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: true
+        schema:
+          default: 10
+          maximum: 1000
+          minimum: 1
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApiUsersOffset_200_response"
+          description: Response for status 200
+      summary: User pagination cursor-based
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/me:
+    get:
+      operationId: get_api_users_me
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApiUsersMe_200_response"
+          description: Response for status 200
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 401
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 404
+      summary: Get current authenticated user
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/offset:
+    get:
+      operationId: get_api_users_offset
+      parameters:
+      - explode: true
+        in: query
+        name: offset
+        required: true
+        schema:
+          default: 0
+          minimum: 0
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: true
+        schema:
+          default: 10
+          maximum: 1000
+          minimum: 1
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApiUsersOffset_200_response"
+          description: Response for status 200
+      summary: User pagination offset/limit
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/page:
+    get:
+      operationId: get_api_users_page
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: true
+        schema:
+          default: 1
+          minimum: 1
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: per_page
+        required: true
+        schema:
+          default: 10
+          maximum: 1000
+          minimum: 1
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApiUsersOffset_200_response"
+          description: Response for status 200
+      summary: User pagination page-based
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/{id}:
+    delete:
+      operationId: delete_api_users_by_id
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: "#/components/schemas/getApiUsersById_id_parameter"
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/deleteApiUsersById_200_response"
+          description: Response for status 200
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 404
+      summary: Delete a user
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+    get:
+      operationId: get_api_users_by_id
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: "#/components/schemas/getApiUsersById_id_parameter"
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiUsers_201_response"
+          description: Response for status 200
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 403
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 404
+      summary: Get user by ID
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+    patch:
+      operationId: patch_api_users_by_id
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: "#/components/schemas/getApiUsersById_id_parameter"
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/patchApiUsersById_request"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/patchApiUsersById_request"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/patchApiUsersById_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiUsers_201_response"
+          description: Response for status 200
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 404
+      summary: Partially update a user account information
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/{id}/addresses:
+    post:
+      operationId: post_api_users_by_id_addresses
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: "#/components/schemas/getApiUsersById_id_parameter"
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postApiUsersByIdAddresses_request"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/postApiUsersByIdAddresses_request"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/postApiUsersByIdAddresses_request"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiUsersByIdAddresses_201_response"
+          description: Response for status 201
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 403
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 404
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 500
+      summary: Add a new address for a user
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+  /api/users/{id}/addresses/{address_id}:
+    patch:
+      operationId: patch_api_users_by_id_addresses_by_address_id
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: "#/components/schemas/getApiUsersById_id_parameter"
+        style: simple
+      - explode: false
+        in: path
+        name: address_id
+        required: true
+        schema:
+          $ref: "#/components/schemas/getApiUsersById_id_parameter"
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/patchApiUsersByIdAddressesByAddress_id_request"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/patchApiUsersByIdAddressesByAddress_id_request"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/patchApiUsersByIdAddressesByAddress_id_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiUsersByIdAddresses_201_response"
+          description: Response for status 200
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 403
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 404
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postApiAuthLogin_401_response"
+          description: Response for status 500
+      summary: Update an existing address for a user
+      tags:
+      - User Management
+      x-openapi-router-controller: openapi_server.controllers.user_management_controller
+components:
+  schemas:
+    getApi_200_response:
+      example:
+        message: API is running
+      properties:
+        message:
+          example: API is running
+          title: message
+          type: string
+      title: getApi_200_response
+      type: object
+    postApiAuthLogin_request:
+      properties:
+        email:
+          format: email
+          title: email
+          type: string
+        password:
+          minLength: 6
+          title: password
+          type: string
+      required:
+      - email
+      - password
+      title: postApiAuthLogin_request
+      type: object
+    postApiAuthLogin_200_response:
+      example:
+        token: token
+      properties:
+        token:
+          title: token
+          type: string
+      required:
+      - token
+      title: postApiAuthLogin_200_response
+      type: object
+    postApiAuthLogin_401_response:
+      additionalProperties: false
+      example:
+        message: message
+      properties:
+        message:
+          title: message
+          type: string
+      required:
+      - message
+      title: postApiAuthLogin_401_response
+      type: object
+    postApiAuthLogout_200_response:
+      example:
+        ok: true
+      properties:
+        ok:
+          title: ok
+          type: boolean
+      required:
+      - ok
+      title: postApiAuthLogout_200_response
+      type: object
+    getApiUsersOffset_200_response_users_inner:
+      example:
+        role: admin
+        updated_at: updated_at
+        dob: dob
+        last_name: last_name
+        created_at: created_at
+        id: -2147483648
+        first_name: first_name
+        email: email
+        username: username
+      properties:
+        id:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          title: id
+          type: integer
+        email:
+          title: email
+          type: string
+        username:
+          title: username
+          type: string
+        first_name:
+          title: first_name
+          type: string
+        last_name:
+          title: last_name
+          type: string
+        dob:
+          nullable: true
+          title: dob
+          type: string
+        role:
+          enum:
+          - admin
+          - operator
+          - user
+          title: role
+          type: string
+        created_at:
+          title: created_at
+          type: string
+        updated_at:
+          title: updated_at
+          type: string
+      required:
+      - created_at
+      - dob
+      - email
+      - first_name
+      - id
+      - last_name
+      - role
+      - updated_at
+      - username
+      title: getApiUsersOffset_200_response_users_inner
+      type: object
+    getApiUsersOffset_200_response:
+      example:
+        users:
+        - role: admin
+          updated_at: updated_at
+          dob: dob
+          last_name: last_name
+          created_at: created_at
+          id: -2147483648
+          first_name: first_name
+          email: email
+          username: username
+        - role: admin
+          updated_at: updated_at
+          dob: dob
+          last_name: last_name
+          created_at: created_at
+          id: -2147483648
+          first_name: first_name
+          email: email
+          username: username
+      properties:
+        users:
+          items:
+            $ref: "#/components/schemas/getApiUsersOffset_200_response_users_inner"
+          title: users
+          type: array
+      required:
+      - users
+      title: getApiUsersOffset_200_response
+      type: object
+    postApiUsers_request_dob:
+      anyOf:
+      - format: date
+        type: string
+      - minLength: 0
+        type: string
+      default: null
+      nullable: true
+      title: postApiUsers_request_dob
+    postApiUsers_request:
+      properties:
+        email:
+          format: email
+          title: email
+          type: string
+        username:
+          maxLength: 30
+          minLength: 5
+          title: username
+          type: string
+        password:
+          minLength: 6
+          title: password
+          type: string
+        first_name:
+          maxLength: 50
+          minLength: 1
+          title: first_name
+          type: string
+        last_name:
+          maxLength: 50
+          minLength: 1
+          title: last_name
+          type: string
+        dob:
+          $ref: "#/components/schemas/postApiUsers_request_dob"
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - username
+      title: postApiUsers_request
+      type: object
+    postApiUsers_201_response:
+      example:
+        user:
+          role: admin
+          updated_at: updated_at
+          dob: dob
+          last_name: last_name
+          created_at: created_at
+          id: -2147483648
+          first_name: first_name
+          email: email
+          username: username
+      properties:
+        user:
+          $ref: "#/components/schemas/getApiUsersOffset_200_response_users_inner"
+      required:
+      - user
+      title: postApiUsers_201_response
+      type: object
+    getApiUsersMe_200_response:
+      additionalProperties: false
+      example:
+        user:
+          role: admin
+          updated_at: updated_at
+          dob: dob
+          last_name: last_name
+          created_at: created_at
+          id: -2147483648
+          first_name: first_name
+          email: email
+          username: username
+      properties:
+        user:
+          $ref: "#/components/schemas/getApiUsersOffset_200_response_users_inner"
+      required:
+      - user
+      title: getApiUsersMe_200_response
+      type: object
+    getApiUsersById_id_parameter:
+      anyOf:
+      - default: "0"
+        format: numeric
+        type: string
+      - type: number
+    deleteApiUsersById_200_response:
+      example:
+        message: message
+      properties:
+        message:
+          title: message
+          type: string
+      required:
+      - message
+      title: deleteApiUsersById_200_response
+      type: object
+    patchApiUsersById_request:
+      properties:
+        email:
+          format: email
+          title: email
+          type: string
+        username:
+          maxLength: 30
+          minLength: 5
+          title: username
+          type: string
+        first_name:
+          maxLength: 50
+          minLength: 1
+          title: first_name
+          type: string
+        last_name:
+          maxLength: 50
+          minLength: 1
+          title: last_name
+          type: string
+        dob:
+          $ref: "#/components/schemas/postApiUsers_request_dob"
+      title: patchApiUsersById_request
+      type: object
+    postApiUsersByIdAddresses_request_is_default:
+      anyOf:
+      - default: "0"
+        format: integer
+        type: string
+      - default: 0
+        maximum: 1
+        minimum: 0
+        type: integer
+      default: 0
+      maximum: 1
+      minimum: 0
+      title: postApiUsersByIdAddresses_request_is_default
+    postApiUsersByIdAddresses_request:
+      properties:
+        address:
+          maxLength: 255
+          minLength: 5
+          title: address
+          type: string
+        phone:
+          format: "^[0-9]{10,11}$"
+          maxLength: 10
+          title: phone
+          type: string
+        state:
+          maxLength: 100
+          title: state
+          type: string
+        postal_code:
+          maxLength: 20
+          nullable: true
+          title: postal_code
+          type: string
+        country:
+          maxLength: 100
+          title: country
+          type: string
+        is_default:
+          $ref: "#/components/schemas/postApiUsersByIdAddresses_request_is_default"
+        created_at:
+          title: created_at
+          type: string
+        updated_at:
+          title: updated_at
+          type: string
+      required:
+      - address
+      - country
+      - phone
+      - state
+      title: postApiUsersByIdAddresses_request
+      type: object
+    postApiUsersByIdAddresses_201_response_address:
+      example:
+        country: country
+        address: address
+        updated_at: updated_at
+        user_id: 2147483647
+        phone: phone
+        created_at: created_at
+        id: -2147483648
+        state: state
+        postal_code: postal_code
+        is_default: -2147483648
+      properties:
+        id:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          title: id
+          type: integer
+        user_id:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          title: user_id
+          type: integer
+        address:
+          title: address
+          type: string
+        phone:
+          title: phone
+          type: string
+        state:
+          title: state
+          type: string
+        postal_code:
+          nullable: true
+          title: postal_code
+          type: string
+        country:
+          title: country
+          type: string
+        is_default:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          title: is_default
+          type: integer
+        created_at:
+          title: created_at
+          type: string
+        updated_at:
+          title: updated_at
+          type: string
+      required:
+      - address
+      - country
+      - created_at
+      - id
+      - is_default
+      - phone
+      - postal_code
+      - state
+      - updated_at
+      - user_id
+      title: postApiUsersByIdAddresses_201_response_address
+      type: object
+    postApiUsersByIdAddresses_201_response:
+      example:
+        address:
+          country: country
+          address: address
+          updated_at: updated_at
+          user_id: 2147483647
+          phone: phone
+          created_at: created_at
+          id: -2147483648
+          state: state
+          postal_code: postal_code
+          is_default: -2147483648
+      properties:
+        address:
+          $ref: "#/components/schemas/postApiUsersByIdAddresses_201_response_address"
+      required:
+      - address
+      title: postApiUsersByIdAddresses_201_response
+      type: object
+    patchApiUsersByIdAddressesByAddress_id_request:
+      properties:
+        id:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          title: id
+          type: integer
+        user_id:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          title: user_id
+          type: integer
+        address:
+          maxLength: 255
+          minLength: 5
+          title: address
+          type: string
+        phone:
+          format: "^[0-9]{10,11}$"
+          maxLength: 10
+          title: phone
+          type: string
+        state:
+          maxLength: 100
+          title: state
+          type: string
+        postal_code:
+          maxLength: 20
+          nullable: true
+          title: postal_code
+          type: string
+        country:
+          maxLength: 100
+          title: country
+          type: string
+        is_default:
+          $ref: "#/components/schemas/postApiUsersByIdAddresses_request_is_default"
+        created_at:
+          title: created_at
+          type: string
+        updated_at:
+          title: updated_at
+          type: string
+      title: patchApiUsersByIdAddressesByAddress_id_request
+      type: object
+    getIndex_200_response:
+      example:
+        status: ok
+      properties:
+        status:
+          example: ok
+          title: status
+          type: string
+      title: getIndex_200_response
+      type: object
