@@ -11,5 +11,9 @@ dependencies = [
     "Faker",
     "PyJWT",
     "flask_jwt_extended",
-    "openapi-generator-cli"
+    "openapi-generator-cli",
+    "mongoengine",
+    "python-dotenv",
+    "flask-marshmallow>=1.2.0",
+    "nest_asyncio"
 ]
