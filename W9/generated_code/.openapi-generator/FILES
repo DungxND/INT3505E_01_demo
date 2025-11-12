@@ -1,6 +1,5 @@
 .dockerignore
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 Dockerfile
 README.md
@@ -34,12 +33,8 @@ openapi_server/models/post_api_users_by_id_addresses201_response_address.py
 openapi_server/models/post_api_users_by_id_addresses_request.py
 openapi_server/models/post_api_users_by_id_addresses_request_is_default.py
 openapi_server/models/post_api_users_request.py
-openapi_server/models/post_api_users_request_dob.py
 openapi_server/openapi/openapi.yaml
 openapi_server/test/__init__.py
-openapi_server/test/test_authentication_controller.py
-openapi_server/test/test_default_controller.py
-openapi_server/test/test_user_management_controller.py
 openapi_server/typing_utils.py
 openapi_server/util.py
 requirements.txt

@@ -627,15 +627,6 @@ components:
       - users
       title: getApiUsersOffset_200_response
       type: object
-    postApiUsers_request_dob:
-      anyOf:
-      - format: date
-        type: string
-      - minLength: 0
-        type: string
-      default: null
-      nullable: true
-      title: postApiUsers_request_dob
     postApiUsers_request:
       properties:
         email:
@@ -662,7 +653,10 @@ components:
           title: last_name
           type: string
         dob:
-          $ref: "#/components/schemas/postApiUsers_request_dob"
+          format: date
+          nullable: true
+          title: dob
+          type: string
       required:
       - email
       - first_name
@@ -749,7 +743,10 @@ components:
           title: last_name
           type: string
         dob:
-          $ref: "#/components/schemas/postApiUsers_request_dob"
+          format: date
+          nullable: true
+          title: dob
+          type: string
       title: patchApiUsersById_request
       type: object
     postApiUsersByIdAddresses_request_is_default:

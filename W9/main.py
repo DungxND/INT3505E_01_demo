@@ -1,9 +1,12 @@
 import os
-from dotenv import load_dotenv
-from apiflask import APIFlask, Schema
-from marshmallow import fields
-from mongoengine import Document, StringField, FloatField, connect
 from typing import List
+
+from apiflask import APIFlask, Schema
+from bson import ObjectId
+from bson.errors import InvalidId
+from dotenv import load_dotenv
+from marshmallow import fields
+from mongoengine import Document, FloatField, StringField, connect
 
 load_dotenv()
 
@@ -92,6 +95,8 @@ def create_product(data):
 @app.get("/products/<id>")
 @app.output(ProductOut)
 def get_product(id):
+    if not ObjectId.is_valid(id):
+        return {"message": "Invalid product ID"}, 400
     try:
         product = Product.objects.get(id=id)
         return {
@@ -102,6 +107,8 @@ def get_product(id):
         }
     except Product.DoesNotExist:
         return {"message": "Product not found"}, 404
+    except InvalidId:
+        return {"message": "Invalid product ID"}, 400
 
 
 @app.put("/products/<id>")
@@ -120,13 +127,21 @@ def update_product(id, data):
             "price": product.price,
             "description": product.description or "",
         }
+    except ValidationError:
+        return {"message": "Invalid product ID"}, 400
+    except ValidationError:
+        return {"message": "Invalid product ID"}, 400
     except Product.DoesNotExist:
         return {"message": "Product not found"}, 404
+    except InvalidId:
+        return {"message": "Invalid product ID"}, 400
 
 
 @app.delete("/products/<id>")
 @app.output(MessageSchema)
 def delete_product(id):
+    if not ObjectId.is_valid(id):
+        return {"message": "Invalid product ID"}, 400
     try:
         product = Product.objects.get(id=id)
         product.delete()

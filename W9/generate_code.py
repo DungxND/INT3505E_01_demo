@@ -1,15 +1,17 @@
-import subprocess
 import os
+import subprocess
 
 yaml_file = "api-doc.yaml"
 
-output_dir = "./generated_code"
+output_dir = "generated_code"
 
 os.makedirs(output_dir, exist_ok=True)
 
 result = subprocess.run(
     [
-        "openapi-generator-cli",
+        "java",
+        "-jar",
+        "openapi-generator-cli.jar",
         "generate",
         "-i",
         yaml_file,
