@@ -15,5 +15,7 @@ dependencies = [
     "mongoengine",
     "python-dotenv",
     "flask-marshmallow>=1.2.0",
-    "nest_asyncio"
+    "nest_asyncio",
+    "pytest",
+    "mongomock"
 ]

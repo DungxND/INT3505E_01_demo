@@ -370,13 +370,10 @@ paths:
                   maxLength: 50
                   type: string
                 dob:
+                  type: string
+                  format: date
+                  nullable: true
                   default: null
-                  anyOf:
-                    - format: date
-                      type: string
-                    - type: "null"
-                    - minLength: 0
-                      type: string
               required:
                 - email
                 - username
@@ -406,13 +403,10 @@ paths:
                   maxLength: 50
                   type: string
                 dob:
+                  type: string
+                  format: date
+                  nullable: true
                   default: null
-                  anyOf:
-                    - format: date
-                      type: string
-                    - type: "null"
-                    - minLength: 0
-                      type: string
               required:
                 - email
                 - username
@@ -442,13 +436,10 @@ paths:
                   maxLength: 50
                   type: string
                 dob:
+                  type: string
+                  format: date
+                  nullable: true
                   default: null
-                  anyOf:
-                    - format: date
-                      type: string
-                    - type: "null"
-                    - minLength: 0
-                      type: string
               required:
                 - email
                 - username
@@ -803,13 +794,10 @@ paths:
                   maxLength: 50
                   type: string
                 dob:
+                  type: string
+                  format: date
+                  nullable: true
                   default: null
-                  anyOf:
-                    - format: date
-                      type: string
-                    - type: "null"
-                    - minLength: 0
-                      type: string
           application/x-www-form-urlencoded:
             schema:
               type: object
@@ -830,13 +818,10 @@ paths:
                   maxLength: 50
                   type: string
                 dob:
+                  type: string
+                  format: date
+                  nullable: true
                   default: null
-                  anyOf:
-                    - format: date
-                      type: string
-                    - type: "null"
-                    - minLength: 0
-                      type: string
           multipart/form-data:
             schema:
               type: object
@@ -857,13 +842,10 @@ paths:
                   maxLength: 50
                   type: string
                 dob:
+                  type: string
+                  format: date
+                  nullable: true
                   default: null
-                  anyOf:
-                    - format: date
-                      type: string
-                    - type: "null"
-                    - minLength: 0
-                      type: string
       responses:
         "200":
           description: Response for status 200
